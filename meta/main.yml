@@ -1,5 +1,4 @@
 galaxy_info:
-  role_name: minishift-nginx
   author: Tom Gamull
   description: Installs minishift with nginx or nginx plus router
   company: NGINX

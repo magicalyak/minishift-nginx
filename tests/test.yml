@@ -3,7 +3,7 @@
   connection: local
   gather_facts: yes
   roles:
-    - role: minishift_nginx
+    - role: minishift-nginx
       minishift_repo: minishift/minishift 
       minishift_github_url: https://api.github.com/repos
       minishit_release_tag_name: "v1.0.0-beta.1"

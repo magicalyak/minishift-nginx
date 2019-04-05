@@ -4,7 +4,7 @@
   connection: local
   gather_facts: yes
   roles:
-    - role: magicalyak.minishift-nginx
+    - role: magicalyak.minishift_nginx
       minishift_repo: minishift/minishift
       minishift_github_url: https://api.github.com/repos
       minishift_release_tag_name: ""
