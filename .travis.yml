@@ -1,0 +1,19 @@
+language: python
+dist: trusty
+sudo: required
+
+before_install:
+  - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty-backports universe'
+  - sudo apt-get update -qq
+
+install:
+  - pip install https://github.com/ansible/ansible/archive/devel.tar.gz 
+
+script:
+  # Run tests
+  - cd tests
+  - ansible-playbook --syntax-check test.yml
+
+notifications:
+  email: false
+  webhooks: https://galaxy-qa.ansible.com/api/v1/notifications/
