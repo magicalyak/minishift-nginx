@@ -157,7 +157,8 @@ After you install the role, copy *minishift-nginx.yml* to your project directory
 $ ansible-galaxy install magicalyak.minishift_nginx
 
 # Copy nginx-repo.crt and nginx-repo-key files
-$ cp nginx-repo.{crt key} ${ANSIBLE_ROLES_PATH}/magicalyak.minishift_nginx/files
+$ mkdir ${ANSIBLE_ROLES_PATH}/magicalyak.minishift_nginx/files
+$ cp nginx-repo.{crt,key} ${ANSIBLE_ROLES_PATH}/magicalyak.minishift_nginx/files
 
 # Copy the playbook from your roles path to the current working directory
 $ cp ${ANSIBLE_ROLES_PATH}/magicalyak.minishift_nginx/minishift-nginx.yml .
