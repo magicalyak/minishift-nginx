@@ -3,7 +3,7 @@
   import_tasks: checkdir.yml
 
 - name: Install Docker Machine binary
-  import_tasks: "{{ ansible_os_family }}_driver.yml"
+  include_tasks: "{{ ansible_os_family }}_driver.yml"
 
 - name: Check if minishift binary exists
   stat:
