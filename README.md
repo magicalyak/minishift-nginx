@@ -37,7 +37,7 @@ After the role executes, and minishift is running, you will be able to access th
 ### OSX
 
 - [homebrew](https://brew.sh)
-- [Ansible 2.2+](https://docs.ansible.com)
+- [Ansible 2.4+](https://docs.ansible.com)
 
 #### Mounting /Users to the Minishift VM
 
