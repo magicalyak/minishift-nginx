@@ -1,0 +1,24 @@
+- name: Login as system:admin 
+  command: oc login -u system:admin -n default
+
+- name: Backup default Router configuration
+  command: oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router > default-router-backup.yaml
+
+- name: Delete Router
+  command: oc delete -f default-router-backup.yaml
+
+- name: Deploy NGINX Plus router
+  command: oc adm router router --images=$(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2 --type=''
+  when:
+    - nginx-plus
+
+- name: Deploy NGINX router
+  command: oc adm router router --images=$(minishift openshift registry)/openshift/nginx-openshift-router:0.2 --type=''
+  when:
+    - not nginx-plus
+
+- name: Log in as developer
+  command: oc login -u developer -p developer
+ 
+- name: Set the namespace to 'default'
+  command: oc project default 

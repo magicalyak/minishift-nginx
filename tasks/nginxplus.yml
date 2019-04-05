@@ -1,0 +1,39 @@
+- name: Clone nginx openshift router repository
+  git:
+    repo: 'https://github.com/nginxinc/nginx-openshift-router'
+    dest: "{{ git-path }}/nginx-openshift-router"
+  ignore_errors: true
+
+- name: Copy NGINX license files to repository
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "{{ git-path }}/nginx-openshift-router/src/nginx-plus/{{ item }}"
+  with_items:
+    - nginx-repo.crt
+    - nginx-repo.key
+
+- name: Build NGINX Plus docker image
+  command: docker build -t nginx-plus-openshift-router:0.2 .
+  args:
+    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+
+- name: Log in as developer
+  command: oc login -u developer -p developer -n default
+
+- name: Logon to MiniShift private repository
+  command: docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
+
+- name: Upload NGINX Plus image to private docker repository
+  command: docker login -p {{ docker-key }} -e unused -u unused $(minishift docker registry)
+  args:
+    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+
+- name: Tag NGINX Plus docker image
+  command: docker tag nginx-plus-openshift-router:0.2 $(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2
+  args:
+    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+
+- name: Push NGINX Plus docker image
+  command: docker push $(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2
+  args:
+    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"

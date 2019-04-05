@@ -1,0 +1,53 @@
+# install_minishift.yml 
+
+- name: Get the Mac asset 
+  include_tasks: "{{ role_path }}/tasks/get_ms_darwin_asset.yml"
+  with_items: "{{ assets.json }}"
+  when: assets is defined and ansible_os_family == 'Darwin'
+
+- name: Get the Linux asset
+  include_tasks: "{{ role_path }}/tasks/get_ms_linux_asset.yml"
+  with_items: "{{ assets.json }}"
+  when: assets is defined and ansible_os_family != 'Darwin' and ansible_os_family != 'Windows'
+
+- name: Should have an asset_name
+  assert:
+    that: asset_name is defined
+
+- name: Create a temp dir
+  command: mktemp -d -t ansible.XXXXXXXXXX
+  register: temp_output
+
+- name: Download the asset
+  get_url:
+    url: "{{ asset_url }}"
+    dest: "{{ temp_output.stdout }}/{{ asset_name }}" 
+
+- name: Unzip the archive
+  command: "unzip {{ asset_name }}" 
+  args:
+    chdir: "{{ temp_output.stdout }}"
+  when: asset_name | search('zip$')
+
+- name: Untar the archive
+  command: "tar -xvzf {{ asset_name }}" 
+  args:
+    chdir: "{{ temp_output.stdout }}"
+  when: asset_name | search('tgz$')
+
+- name: Get the tgz dir name
+  shell: 'echo {{ asset_name}} | sed "s/.zip$//" | sed "s/.tgz$//"'
+  register: asset_dir
+
+- name: Move the executable to the requested directory
+  copy:
+    src: "{{ temp_output.stdout }}/{{ asset_dir.stdout }}/minishift"
+    dest: "{{ minishift_dest }}/minishift"
+    remote_src: yes
+    mode: 0775 
+  become: yes
+
+- name: Remove the temp directory
+  file:
+    path: "{{ temp_output.stdout }}"
+    state: absent

@@ -1,0 +1,36 @@
+# copy_oc_client.yml
+---
+- name: Get the path to the oc client
+  find:
+    paths: "{{ lookup('env', 'HOME') }}/.minishift/cache/oc"
+    patterns: "v*"
+    hidden: yes
+    file_type: directory
+  register: versions
+
+- name: Set latest_version
+  set_fact:
+    latest_version: "{{ versions.files | last }}"
+
+- name: Set path
+  set_fact:
+    oc_path: "{{ latest_version.path }}/{{ ansible_system | lower }}/oc"
+
+- name: Check if path exists
+  stat:
+    path: '{{ oc_path }}' 
+  register: oc
+
+- name: Let user know we failed to find oc
+  debug:
+    msg: 'Failed to find {{ oc_path }}. Please file an issue, so we can fix in a future release'
+  when: not oc.stat.exists
+
+- name: Copy oc client
+  copy:
+    src: "{{ latest_version.path }}/{{ ansible_system | lower }}/oc"
+    dest: "{{ openshift_client_dest }}/oc"
+    mode: 0755
+    remote_src: yes
+  become: yes
+  when: oc.stat.exists

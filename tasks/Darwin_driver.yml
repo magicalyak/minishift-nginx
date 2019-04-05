@@ -1,0 +1,50 @@
+# Darwin_driver.yml 
+
+- name: Check if docker-machine-driver-xhyve is installed
+  command: brew info --installed docker-machine-driver-xhyve
+  register: output
+
+- name: Install docker-machine-driver-xhyve 
+  homebrew: 
+    name: docker-machine-driver-xhyve
+    state: present
+  when: 
+    - "'Not installed' in output.stdout" 
+    - not use-hyperkit
+
+- name: Install docker-machine-driver-hyperkit
+  homebrew:
+    name: hyperkit
+    state: present
+  when: 
+    - "'Not installed' in output.stdout"
+    - use-hyperkit
+
+- name: Get brew prefix
+  command: brew --prefix
+  register: prefix
+
+- name: Install docker-machine-driver-hyperkit binary 
+  become: yes
+  become_user: root
+  get_url:
+    url: https://github.com/machine-drivers/docker-machine-driver-hyperkit/releases/download/v1.0.0/docker-machine-driver-hyperkit
+    dest: /usr/local/bin/docker-machine-driver-hyperkit
+    mode: 0755
+    owner: root
+    group: wheel
+  when: 
+    - "'Not installed' in output.stdout"
+    - use-hyperkit
+
+- name: Set owner and permissions for docker-machine-driver-xyhve
+  become: yes
+  become_user: root
+  file: 
+    path: "{{ prefix.stdout }}/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve"
+    owner: root
+    group: wheel
+    mode: "u+s"
+  when: 
+    - "'Not installed' in output.stdout" 
+    - not use-hyperkit"

@@ -1,0 +1,15 @@
+# Any private crt and keys #
+############################
+*.crt
+*.key
+
+.idea
+
+# Ignore MacOS system files
+.DS_Store
+
+# Ignore log files
+*.log
+
+# Ignore Ansible retry files
+*.retry

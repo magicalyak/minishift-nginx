@@ -1,0 +1,36 @@
+- name: Check if minishift is running
+  command: minishift status
+  register: minishift_state
+  ignore_errors: yes
+
+- name: Message for minishift is already running 
+  debug:
+    msg: "Minishift is already running. Use minishift_restart to continue."
+  when: "'Running' in minishift_state.stdout and not minishift_restart"
+
+- name: Stop playbook, if running and not restart
+  assert:
+    that: true == false
+  when: "'Running' in minishift_state.stdout and not minishift_restart"
+
+- name: Message for shutting down minishift
+  debug:
+    msg: "Shutting down minishift..."
+  when: "'Running' in minishift_state.stdout"
+
+- name: Shutdown minishift
+  command: minishift stop
+  when: "'Running' in minishift_state.stdout"
+
+- name: Deleting minishift
+  command: minishift delete --force
+  when: minishift_delete
+  ignore_errors: yes
+  become: yes
+
+- name: Remove ~/.minishift
+  file: 
+    path: ~/.minishift
+    state: absent
+  when: minishift_delete
+  become: yes

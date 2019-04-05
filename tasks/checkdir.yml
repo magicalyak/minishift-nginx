@@ -1,0 +1,19 @@
+- name: Check if git path exists
+  tasks:
+  - stat:
+      path: '{{ git-path }}' 
+    register: result
+
+  - debug:
+      msg: 'Failed to find {{ git-path }}. Please fix this before continuing'
+    when: result.stat.exists == false
+
+- name: Verify NGINX Plus licsense is present
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "{{ git-path }}/nginx-openshift-router/src/nginx-plus/{{ item }}"
+  with_items:
+    - nginx-repo.crt
+    - nginx-repo.key
+  when:
+    - nginx-plus
