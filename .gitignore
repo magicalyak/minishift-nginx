@@ -13,3 +13,4 @@
 
 # Ignore Ansible retry files
 *.retry
+ansible-lint.txt

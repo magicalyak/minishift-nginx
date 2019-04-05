@@ -18,7 +18,7 @@
 
 - name: Check if path exists
   stat:
-    path: '{{ oc_path }}' 
+    path: '{{ oc_path }}'
   register: oc
 
 - name: Let user know we failed to find oc

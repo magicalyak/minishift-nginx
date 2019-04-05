@@ -1,11 +1,15 @@
-- name: Login as system:admin 
+- name: Login as system:admin
   command: oc login -u system:admin
+  changed_when: false
 
-- name: Grant cluster-admin to developer 
+- name: Grant cluster-admin to developer
   command: oc adm policy add-cluster-role-to-user cluster-admin developer
+  changed_when: false
 
 - name: Log in as developer
   command: oc login -u developer -p developer
- 
+  changed_when: false
+
 - name: Set the namespace to 'default'
-  command: oc project default 
+  command: oc project default
+  changed_when: false

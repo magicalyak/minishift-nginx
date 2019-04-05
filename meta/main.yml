@@ -3,33 +3,18 @@ galaxy_info:
   author: Tom Gamull
   description: Installs minishift with nginx or nginx plus router
   company: NGINX
-  
-  # If the issue tracker for your role is not on github, uncomment the
-  # next line and provide a value
-  # issue_tracker_url: http://example.com/issue/tracker
-
-  # Some suggested licenses:
-  # - BSD (default)
-  # - MIT
-  # - GPLv2
-  # - GPLv3
-  # - Apache
-  # - CC-BY
-  license: Apache v2 
-
-
-  min_ansible_version: 2.4
-  
-  #
-  # Below are all platforms currently available. Just uncomment the ones that apply
-  # to your role. If you don't see your platform on this list, let us know,
-  # and we'll get it added!
-  #
+  license: Apache v2
+  min_ansible_version: 2.5
   platforms:
   - name: MacOSX
     versions:
     - 10.14
-
+  - name: Fedora
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
   galaxy_tags:
   - oc
   - openshift
@@ -37,5 +22,5 @@ galaxy_info:
   - cluster
   - minishift
   - nginx
-
 dependencies: []
+allow_duplicates: yes

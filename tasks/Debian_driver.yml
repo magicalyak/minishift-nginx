@@ -2,12 +2,12 @@
 
 - name: Downlodad the KVM driver
   get_url:
-    url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm 
+    url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm
     dest: /usr/local/bin/docker-machine-driver-kvm
-    mode: 0755 
+    mode: 0755
   become: yes
 
-- name: Install packages 
+- name: Install packages
   apt:
     name: "{{ item }}"
     state: present
@@ -18,14 +18,16 @@
 
 - name: Get current user
   command: whoami
-  register: output   
+  register: output
+  changed_when: false
 
 - name: Add current uer to libvirt group
   user:
     name: "{{ output.stdout }}"
     groups: libvirt
-    append: yes 
+    append: yes
   become: yes
 
 - name: Refresh user groups
-  shell: newgrp libvirt
+  command: newgrp libvirt
+  changed_when: false

@@ -2,30 +2,37 @@
   git:
     repo: 'https://github.com/nginxinc/nginx-openshift-router'
     dest: "{{ git-path }}/nginx-openshift-router"
+    version: master
   ignore_errors: true
 
 - name: Build NGINX docker image
   command: docker build -t nginx-openshift-router:0.2 .
   args:
     chdir: "{{ git-path }}/nginx-openshift-router/src/nginx"
+  changed_when: false
 
 - name: Log in as developer
   command: oc login -u developer -p developer -n default
+  changed_when: false
 
 - name: Logon to MiniShift private repository
   command: docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
+  changed_when: false
 
 - name: Upload NGINX image to private docker repository
   command: docker login -p {{ docker-key }} -e unused -u unused $(minishift docker registry)
   args:
     chdir: "{{ git-path }}/nginx-openshift-router/src/nginx"
+  changed_when: false
 
 - name: Tag NGINX docker image
   command: docker tag nginx-openshift-router:0.2 $(minishift openshift registry)/openshift/nginx-openshift-router:0.2
   args:
     chdir: "{{ git-path }}/nginx-openshift-router/src/nginx"
+  changed_when: false
 
 - name: Push NGINX docker image
   command: docker push $(minishift openshift registry)/openshift/nginx-openshift-router:0.2
   args:
     chdir: "{{ git-path }}/nginx-openshift-router/src/nginx"
+  changed_when: false

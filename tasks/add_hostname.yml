@@ -1,14 +1,15 @@
 - name: Get the instance IP address
   command: minishift ip
   register: default_ip
+  changed_when: false
 
 - name: Remove hostname
   lineinfile:
     dest: /etc/hosts
-    regexp: '{{ openshift_hostname }}' 
-    state: absent 
+    regexp: '{{ openshift_hostname }}'
+    state: absent
   become: yes
-    
+
 - name: Add hostname
   lineinfile:
     dest: /etc/hosts

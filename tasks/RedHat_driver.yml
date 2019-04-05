@@ -7,25 +7,27 @@
     mode: 0755
   become: yes
 
-- name: Install packages 
+- name: Install packages
   dnf:
     name: "{{ item }}"
     state: present
   with_items:
   - libvirt
-  - qemu-kvm  
+  - qemu-kvm
   become: yes
 
 - name: Get current user
   command: whoami
-  register: output   
+  register: output
+  changed_when: false
 
 - name: Add current user to libvirt group
   user:
     name: "{{ output.stdout }}"
     groups: libvirt
-    append: yes 
+    append: yes
   become: yes
 
 - name: Refresh user groups
-  shell: newgrp libvirt 
+  command: newgrp libvirt
+  changed_when: false
