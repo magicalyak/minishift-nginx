@@ -1,6 +1,6 @@
 - name: Check if git path exists
   stat:
-    path: '{{ git-path }}'
+    path: "{{ git-path }}"
   register: result
 
 - name: Display message if path doesn't exist
