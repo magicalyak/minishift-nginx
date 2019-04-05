@@ -53,9 +53,10 @@
   when: not oc_client.stat.exists or openshift_force_client_copy
 
 - name: Switch the kube config context
-  shell: "set -o pipefail && true | {{ openshift_client_dest }}/oc config use-context /$(minishift ip | tr . -):8443/developer"
-  args:
-    executable: /bin/bash
+  #shell: "set -o pipefail && false | {{ openshift_client_dest }}/oc config use-context /$(minishift ip | tr . -):8443/developer"
+  #args:
+  #  executable: /bin/bash
+  command: "eval $(minishift oc-env)"
   changed_when: false
 
 - name: Give cluster-admin to developer
