@@ -1,12 +1,12 @@
 - name: Check if git path exists
-  tasks:
-  - stat:
-      path: '{{ git-path }}' 
-    register: result
+  stat:
+    path: '{{ git-path }}' 
+  register: result
 
-  - debug:
-      msg: 'Failed to find {{ git-path }}. Please fix this before continuing'
-    when: result.stat.exists == false
+- name: Display message if path doesn't exist
+  debug:
+    msg: 'Failed to find {{ git-path }}. Please fix this before continuing'
+  when: result.stat.exists == false
 
 - name: Verify NGINX Plus licsense is present
   copy:
