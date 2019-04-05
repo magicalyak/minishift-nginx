@@ -8,13 +8,19 @@ galaxy_info:
   platforms:
   - name: MacOSX
     versions:
+    - 10.12
+    - 10.13
     - 10.14
   - name: Fedora
     versions:
-    - all
+    - 23
+    - 24
+    - 25
   - name: Ubuntu
     versions:
-    - all
+    - bionic
+    - cosmic
+    - xenial
   galaxy_tags:
   - oc
   - openshift
