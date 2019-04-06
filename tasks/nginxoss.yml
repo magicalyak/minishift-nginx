@@ -46,16 +46,23 @@
   changed_when: false
 
 - name: Backup default Router configuration
-  command: oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router > default-router-backup.yaml
+  command: "oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router > {{ tmp_path }}/default-router-backup.yaml"
   changed_when: false
 
 - name: Delete Router
-  command: oc delete -f default-router-backup.yaml
+  command: "oc delete -f {{ tmp_path }}/default-router-backup.yaml"
   changed_when: false
 
 - name: Deploy NGINX router
   command: "oc adm router router --images={{ dockerreg.stdout }}/openshift/nginx-openshift-router:0.2 --type=''"
   changed_when: false
+
+- name: Copy default-router-backup.yaml to $HOME
+  copy:
+    src: "{{ tmp_path }}/default-router-backup.yaml"
+    dest: $HOME
+    remote_src: yes
+    backup: yes
 
 - name: Remove the temp directory
   file:
