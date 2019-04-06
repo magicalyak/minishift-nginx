@@ -6,7 +6,7 @@
     - role: minishift-nginx
       minishift_repo: minishift/minishift 
       minishift_github_url: https://api.github.com/repos
-      minishit_release_tag_name: "v1.0.0-beta.1"
+      minishit_release_tag_name: "v1.33.0"
       minishift_dest: /usr/local/bin  
       minishift_force_install: no 
       minishift_volume:
@@ -18,7 +18,8 @@
       minishift_start_options:
       - insecure-registry 172.30.0.0/16
       - insecure-registry minishift
-      - iso-url https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-alpha.1/minishift-centos.iso
+      - insecure-registry local.openshift
+      - iso-url https://github.com/minishift/minishift-centos-iso/releases/download/v1.15.0/minishift-centos7.iso
       openshift_repo: openshift/origin
       openshift_client_dest: /usr/local/bin
       openshift_force_client_install: no 

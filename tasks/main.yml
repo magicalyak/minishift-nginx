@@ -55,14 +55,14 @@
 #    executable: /bin/bash
 #  changed_when: false
 
-- name: Give cluster-admin to developer
+- name: Give cluster-admin to admin
   include_tasks: grant_admin.yml
 
-- name: Create objects
-  include_tasks: create_objects.yml
+#- name: Create objects
+#  include_tasks: create_objects.yml
 
-- name: Add entry to /etc/hosts
-  include_tasks: add_hostname.yml
+#- name: Add entry to /etc/hosts
+#  include_tasks: add_hostname.yml
 
 - name: Configure NGINX Plus Router
   import_tasks: nginxplus.yml
@@ -71,10 +71,6 @@
 - name: Configure NGINX OSS Router
   import_tasks: nginxoss.yml
   when: not nginx_plus
-
-- name: Install NGINX Router
-  import_tasks: nginxrouter.yml
-  become_user: root
 
 - name: Show output
   debug:

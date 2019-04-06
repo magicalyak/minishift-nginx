@@ -3,11 +3,11 @@
   changed_when: false
 
 - name: Grant cluster-admin to developer
-  command: oc adm policy add-cluster-role-to-user cluster-admin developer
+  command: oc adm policy add-cluster-role-to-user cluster-admin admin
   changed_when: false
 
-- name: Log in as developer
-  command: oc login -u developer -p developer
+- name: Log in as admin
+  command: oc login -u admin -p admin
   changed_when: false
 
 - name: Set the namespace to 'default'

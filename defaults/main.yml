@@ -5,7 +5,7 @@ minishift_release_tag_name: ""
 minishift_force_install: yes
 minishift_restart: yes
 minishift_delete: yes 
-minishift_start_options: []
+minishift_start_options: ['--memory', '4GB', '--cpus', '2']
 minishift_dest: /usr/local/bin  
 openshift_client_dest: /usr/local/bin
 openshift_force_client_copy: yes 

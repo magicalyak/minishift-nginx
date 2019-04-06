@@ -27,12 +27,22 @@
     executable: /bin/bash
   changed_when: false
 
-- name: Log in as developer
-  command: oc login -u developer -p developer -n default
+- name: Set minishift docker variables
+  shell: "set -o pipefail && true | eval $(minishift docker-env)"
+  args:
+    executable: /bin/bash
   changed_when: false
 
+- name: Get admin token
+  command: oc whoami -t
+  register: admintoken
+
+- name: Get docker repository location
+  command: minishift openshift registry
+  register: dockerreg
+
 - name: Logon to MiniShift private repository
-  command: "docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)"
+  command: "docker login -p {{ admintoken.stdout }} -u unused {{ dockerreg.stdout }}"
   changed_when: false
 
 - name: Tag NGINX docker image
@@ -45,6 +55,18 @@
   command: docker push $(minishift openshift registry)/openshift/nginx-openshift-router:0.2
   args:
     chdir: "{{ tmp_path }}/nginx-openshift-router/src/nginx"
+  changed_when: false
+
+- name: Backup default Router configuration
+  command: oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router > default-router-backup.yaml
+  changed_when: false
+
+- name: Delete Router
+  command: oc delete -f default-router-backup.yaml
+  changed_when: false
+
+- name: Deploy NGINX router
+  command: "oc adm router router --images={{ dockerreg.stdout }}/openshift/nginx-openshift-router:0.2 --type=''"
   changed_when: false
 
 - name: Remove the temp directory
