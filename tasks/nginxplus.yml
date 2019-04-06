@@ -56,14 +56,10 @@
   changed_when: false
 
 - name: Backup default Router configuration
-  command: "oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router"
-  changed_when: false
-
-- name: Write default backup Router configuration to a file
-  local_action:
-    copy:
-      content: "{{ router }}"
-      dest: "$HOME/default-router-backup.yml"
+  shell: "oc get -o yaml service/router dc/router clusterrolebinding/router-router-role serviceaccount/router > default-router-backup.yml"
+  args:
+    executable: /bin/bash
+    chdir: $HOME
 
 - name: Delete Router
   command: "oc delete -f $HOME/default-router-backup.yml"
