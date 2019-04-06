@@ -1,7 +1,4 @@
 ---
-#- name: Check if directories exist
-#  import_tasks: checkdir.yml
-
 - name: Install Docker Machine binary
   include_tasks: "{{ ansible_os_family }}_driver.yml"
 
@@ -52,12 +49,11 @@
   include_tasks: copy_oc_client.yml
   when: not oc_client.stat.exists or openshift_force_client_copy
 
-- name: Switch the kube config context
-  #shell: "set -o pipefail && false | {{ openshift_client_dest }}/oc config use-context /$(minishift ip | tr . -):8443/developer"
-  #args:
-  #  executable: /bin/bash
-  command: "eval $(minishift oc-env)"
-  changed_when: false
+#- name: Switch the kube config context
+#  shell: "set -o pipefail && true | {{ openshift_client_dest }}/oc config use-context default/$(minishift ip | tr . -):8443/developer"
+#  args:
+#    executable: /bin/bash
+#  changed_when: false
 
 - name: Give cluster-admin to developer
   include_tasks: grant_admin.yml
@@ -70,21 +66,14 @@
 
 - name: Configure NGINX Plus Router
   import_tasks: nginxplus.yml
-  become: yes
-  become_user: root
-  when:
-    - nginx-plus
+  when: nginx_plus
 
 - name: Configure NGINX OSS Router
   import_tasks: nginxoss.yml
-  become: yes
-  become_user: root
-  when:
-    - not nginx-plus
+  when: not nginx_plus
 
 - name: Install NGINX Router
   import_tasks: nginxrouter.yml
-  become: yes
   become_user: root
 
 - name: Show output

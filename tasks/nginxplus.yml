@@ -1,14 +1,24 @@
+- name: Create a temp dir
+  tempfile:
+    state: directory
+    prefix: build
+  register: temp_output
+
+- name: Set tmp_path
+  set_fact:
+    tmp_path: "{{ temp_output.path }}"
+
 - name: Clone nginx openshift router repository
   git:
     repo: 'https://github.com/nginxinc/nginx-openshift-router'
-    dest: "{{ git-path }}/nginx-openshift-router"
+    dest: "{{ tmp_path }}/nginx-openshift-router"
     version: master
   ignore_errors: true
 
 - name: Copy NGINX license files to repository
   copy:
     src: "{{ role_path }}/files/{{ item }}"
-    dest: "{{ git-path }}/nginx-openshift-router/src/nginx-plus/{{ item }}"
+    dest: "{{ tmp_path }}/nginx-openshift-router/src/nginx-plus/{{ item }}"
   with_items:
     - nginx-repo.crt
     - nginx-repo.key
@@ -16,7 +26,13 @@
 - name: Build NGINX Plus docker image
   command: docker build -t nginx-plus-openshift-router:0.2 .
   args:
-    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+    chdir: "{{ tmp_path }}/nginx-openshift-router/src/nginx-plus"
+  changed_when: false
+
+- name: Set minishift envirnomental variables
+  shell: "set -o pipefail && true | eval $(minishift oc-env)"
+  args:
+    executable: /bin/bash
   changed_when: false
 
 - name: Log in as developer
@@ -24,23 +40,22 @@
   changed_when: false
 
 - name: Logon to MiniShift private repository
-  command: docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-  changed_when: false
-
-- name: Upload NGINX Plus image to private docker repository
-  command: docker login -p {{ docker-key }} -e unused -u unused $(minishift docker registry)
-  args:
-    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+  command: "docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)"
   changed_when: false
 
 - name: Tag NGINX Plus docker image
   command: docker tag nginx-plus-openshift-router:0.2 $(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2
   args:
-    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+    chdir: "{{ tmp_path }}/nginx-openshift-router/src/nginx-plus"
   changed_when: false
 
 - name: Push NGINX Plus docker image
   command: docker push $(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2
   args:
-    chdir: "{{ git-path }}/nginx-openshift-router/src/nginx-plus"
+    chdir: "{{ tmp_path }}/nginx-openshift-router/src/nginx-plus"
   changed_when: false
+
+- name: Remove the temp directory
+  file:
+    path: "{{ tmp_path }}"
+    state: absent

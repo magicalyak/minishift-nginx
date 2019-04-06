@@ -11,6 +11,6 @@ openshift_client_dest: /usr/local/bin
 openshift_force_client_copy: yes 
 openshift_hostname: local.openshift
 
-nginx-plus: yes
-use-hyperkit: no
-git-path: $HOME/Downloads/git
+nginx_plus: yes
+use_hyperkit: no
+git_path: $HOME/Downloads/git

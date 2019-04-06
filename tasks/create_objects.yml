@@ -6,7 +6,7 @@
 
 - name: Set tmp_path
   set_fact:
-    tmp_path: "{{ temp_output.path.stdout }}"
+    tmp_path: "{{ temp_output.path }}"
 
 - name: Template route.yml
   template:

@@ -1,5 +1,5 @@
 - name: Login as system:admin
-  command: oc login -u system:admin -n default
+  command: "oc login -u system:admin -n default https://$(minishift ip):8443"
   changed_when: false
 
 - name: Backup default Router configuration
@@ -12,20 +12,14 @@
 
 - name: Deploy NGINX Plus router
   command: oc adm router router --images=$(minishift openshift registry)/openshift/nginx-plus-openshift-router:0.2 --type=''
-  when:
-    - nginx-plus
+  when: nginx_plus
   changed_when: false
 
 - name: Deploy NGINX router
   command: oc adm router router --images=$(minishift openshift registry)/openshift/nginx-openshift-router:0.2 --type=''
-  when:
-    - not nginx-plus
+  when: not nginx_plus
   changed_when: false
 
 - name: Log in as developer
-  command: oc login -u developer -p developer
-  changed_when: false
-
-- name: Set the namespace to 'default'
-  command: oc project default
+  command: "oc login -u developer -p developer -n default https://$(minishift ip):8443"
   changed_when: false

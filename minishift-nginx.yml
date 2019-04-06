@@ -15,6 +15,6 @@
       minishift_start_options: []
       openshift_client_dest: /usr/local/bin
       openshift_force_client_copy: yes
-      nginx-plus: yes
-      use-hyperkit: no
-      git-path: $HOME/Downloads/git
+      nginx_plus: true
+      use_hyperkit: false
+      git_path: $HOME/Downloads/git

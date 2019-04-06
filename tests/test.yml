@@ -22,6 +22,6 @@
       openshift_repo: openshift/origin
       openshift_client_dest: /usr/local/bin
       openshift_force_client_install: no 
-      nginx-plus: no
-      hyperkit: no
-      git-path: $HOME
+      nginx_plus: yes
+      use_hyperkit: no
+      git_path: $HOME/Downloads/git

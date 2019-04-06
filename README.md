@@ -110,15 +110,15 @@ When the Minishift VM is started, the /Users volume will be mounted to the VM. T
 
 > The hostname you'll use to reference the local registry when you're ready to push images. Gets added to `/etc/hosts`.
 
-**nginx-plus:** no
+**nginx_plus:** no
 
 > Enable NGINX Plus.  If you select yes (you rock!!!) then make sure you drop the nginx-repo.crt and nginx-repo.key in the `/files` directory
 
-**use-hyperkit:** no
+**use_hyperkit:** no
 
 > For MaxOSX you can "try to" use hyperkit instad of xhyve by setting this to yes
 
-**git-path:** $HOME/Downloads/git
+**git_path:** $HOME/Downloads/git
 
 > This is the path to where the git repos will be created for the nginx router repositories
 
@@ -145,9 +145,9 @@ Below is a sample playbook that includes all of the default parameters. You'll f
       openshift_client_dest: /usr/local/bin
       openshift_force_client_copy: yes
       openshift_hostname: local.openshift
-      nginx-plus: yes
-      use-hyperkit: no
-      git-path: $HOME/Downloads/git
+      nginx_plus: yes
+      use_hyperkit: no
+      git_path: $HOME/Downloads/git
 ```
 
 After you install the role, copy *minishift-nginx.yml* to your project directory, and execute it with the `--ask-become-pass` option. For example:

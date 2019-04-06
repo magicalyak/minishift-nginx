@@ -11,7 +11,7 @@
     state: present
   when:
     - "'Not installed' in output.stdout"
-    - not use-hyperkit
+    - not use_hyperkit
 
 - name: Install docker-machine-driver-hyperkit
   homebrew:
@@ -19,7 +19,7 @@
     state: present
   when:
     - "'Not installed' in output.stdout"
-    - use-hyperkit
+    - use_hyperkit
 
 - name: Get brew prefix
   command: brew --prefix
@@ -37,7 +37,7 @@
     group: wheel
   when:
     - "'Not installed' in output.stdout"
-    - use-hyperkit
+    - use_hyperkit
 
 - name: Set owner and permissions for docker-machine-driver-xyhve
   become: yes
@@ -49,4 +49,4 @@
     mode: "u+s"
   when:
     - "'Not installed' in output.stdout"
-    - not use-hyperkit"
+    - not use_hyperkit"
