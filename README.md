@@ -69,11 +69,21 @@ $ eval $(minishift docker-env)
 $ ansible-playbook -i inventory --ask-become-pass minishift-nginx.yml
 ```
 
+## Uninstall
+
+To revert the changes make sure you don't delete the default-router-backup.yml file in the $HOME directory and run the following:
+
+```sh
+# Delete the NGINX Router
+$ oc delete service/router dc/router clusterrolebinding/router-router-role serviceaccount/router
+
+# Restore existing router
+$ oc create -f $HOME/default-router-backup.yml
+```
+
 ## Dependencies
 
-NGINX Plus license: nginx-repo.crt and nginx-repo.key
-git needs to be installed
-Must run ```eval $(minishift docker-env)```
+[minishift-up](https://galaxy.ansible.com/magicalyak/minishift_up)
 
 ## License
 
