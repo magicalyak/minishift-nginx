@@ -1,6 +1,6 @@
 galaxy_info:
   author: Tom Gamull
-  description: Installs minishift with nginx or nginx plus router
+  description: Installs NGINX or NGINX Plus minishift router
   company: NGINX
   license: Apache v2
   min_ansible_version: 2.5

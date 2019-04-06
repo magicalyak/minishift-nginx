@@ -21,18 +21,6 @@
     chdir: "{{ tmp_path }}/nginx-openshift-router/src/nginx"
   changed_when: false
 
-- name: Set minishift envirnomental variables
-  shell: "set -o pipefail && true | eval $(minishift oc-env)"
-  args:
-    executable: /bin/bash
-  changed_when: false
-
-- name: Set minishift docker variables
-  shell: "set -o pipefail && true | eval $(minishift docker-env)"
-  args:
-    executable: /bin/bash
-  changed_when: false
-
 - name: Get admin token
   command: oc whoami -t
   register: admintoken
