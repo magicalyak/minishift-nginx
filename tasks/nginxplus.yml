@@ -32,10 +32,12 @@
 - name: Get admin token
   command: oc whoami -t
   register: admintoken
+  changed_when: false
 
 - name: Get docker repository location
   command: minishift openshift registry
   register: dockerreg
+  changed_when: false
 
 - name: Logon to MiniShift private repository
   shell: "set -o pipefail && true | eval $(minishift docker-env) && docker login -p {{ admintoken.stdout }} -u unused {{ dockerreg.stdout }}"
@@ -60,6 +62,7 @@
   args:
     executable: /bin/bash
     chdir: $HOME
+  changed_when: false
 
 - name: Delete Router
   command: "oc delete -f $HOME/default-router-backup.yml"
