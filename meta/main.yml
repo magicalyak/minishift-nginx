@@ -30,5 +30,6 @@ galaxy_info:
   - cluster
   - minishift
   - nginx
-dependencies: []
+dependencies:
+  - magicalyak.minishift_up
 allow_duplicates: yes
